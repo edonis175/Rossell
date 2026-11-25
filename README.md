@@ -1,183 +1,92 @@
 # Rossell
 
-Marketing site for **Rossell**, a workspace intelligence product, plus a MERN backend
-(Node.js + Express + MongoDB) that stores the demo content and receives form submissions.
+A marketing site for a fictional workspace-intelligence product, plus an optional backend
+(Node.js, Express, MongoDB).
 
-The front end is dependency-free vanilla HTML/CSS/JS. GSAP and the two variable fonts are
-vendored locally, so the site renders and animates even without internet access.
-
----
-
-## What is in here
-
-```
-.
-├── index.html                 # the whole site (hero, features, analytics, integrations, blog, contact)
-├── 404.html                   # playful not-found page (magnetic 404, same header + theme)
-├── styles/
-│   ├── main.css               # design tokens, components, sections, responsive rules, dark theme
-│   ├── 404.css                # 404 page only: artwork, entrance, responsive rules
-│   └── fonts/                 # Manrope + Plus Jakarta Sans (variable, self-hosted)
-├── scripts/
-│   ├── main.js                # theme, nav, modals, scroll reveals, charts, forms, filters
-│   ├── 404.js                 # 404 page only: theme toggle, magnet, requested path
-│   ├── api.js                 # fetch wrapper for /api with offline fallback
-│   └── vendor/                # gsap.min.js + ScrollTrigger.min.js (no CDN dependency)
-├── shared/
-│   └── content.js             # SINGLE SOURCE OF TRUTH for all demo content (site + seeder)
-├── assets/img/                # dummy blog imagery (replace before launch)
-├── server/                    # Express + MongoDB API (see below)
-└── tests/                     # jsdom tests for markup, styles and every interaction
-```
-
-### Site sections
-
-| Nav item     | Section      | What it contains                                                       |
-| ------------ | ------------ | ---------------------------------------------------------------------- |
-| —            | Hero         | headline, CTAs, KPI counters, interactive product panel                |
-| Features     | `#features`  | four feature cards + three-step "how it works"                         |
-| Analytics    | `#analytics` | KPI cards, switchable SVG chart, channel bars, CSV export              |
-| Integrations | `#integrations` | searchable catalogue, category filters, per-integration switches    |
-| Blog         | `#blog`      | category filters, load more, article modal                             |
-| Get in Touch | `#contact`   | contact details, validated form, FAQ accordion, legal modals in footer |
-
-Also included: dark/light theme (persisted, follows the OS until the visitor chooses),
-mobile navigation, scroll progress bar, back-to-top, toast feedback, trial sign-up modal,
-newsletter form and keyboard/focus handling for every dialog.
-
-### 404 page
-
-`404.html` is a standalone page built from the same tokens, header pill and theme toggle:
-
-- the three outlined digits lean toward the cursor (the bigger the pull, the closer it is)
-  and ease back to rest; `prefers-reduced-motion` and touch screens get the still version
-- the zero is a real `<button>`: it spins and answers with a new line each press
-- the requested path is printed from `location` as text (never as markup)
-- header, primary button and quiet links all lead back into the site
-
-Any host serves it automatically: `express.static` lets a request fall through to a
-catch-all that answers `404` with `404.html`, and missing assets/API routes keep their
-JSON 404. Static hosts (Netlify, Vercel, GitHub Pages) pick up the file by convention.
+The front end is plain HTML, CSS and JavaScript — no framework, no build step, no external
+requests. The animation library (GSAP) and both fonts are vendored in the repository, so the
+site runs offline.
 
 ---
 
-## Run the front end only
+## What is in the repository
 
-Open `index.html` with any static server, e.g.:
+| Path                  | Contents                                                                 |
+| --------------------- | ------------------------------------------------------------------------ |
+| `index.html`          | the whole site: hero, features, analytics, integrations, blog, contact     |
+| `404.html`            | not-found page (same header and theme)                                    |
+| `styles/`             | design tokens, sections, responsive rules, dark/light theme, fonts         |
+| `scripts/`            | interactions: theme, navigation, modals, charts, forms, filters, reveals   |
+| `shared/content.js`   | all demo content, used by the site **and** by the database seeder          |
+| `assets/`             | placeholder images and the favicon                                        |
+| `server/`             | Express API with Mongoose models and `seed.js` (optional)                  |
+| `tests/`              | jsdom test suites for the front end                                        |
 
-```bash
-npx serve .
-# or the VS Code "Live Server" extension
-```
-
-The page works on its own: when `/api` cannot be reached it renders `shared/content.js`
-and shows an honest "API offline" note after a form submission.
-
-## Run the full stack (front end + API + MongoDB)
-
-Requirements: Node 18+ and a running MongoDB instance.
-
-```bash
-cd server
-cp .env.example .env          # adjust MONGODB_URI if needed
-npm install
-npm run seed                  # clears and fills the demo collections
-npm run dev                   # http://localhost:4000
-```
-
-`server/server.js` serves both the API at `/api` **and** the static site from the repository
-root, so one command is enough to preview everything. Without MongoDB the API answers `503`
-and the site keeps working from its bundled content.
-
-### API
-
-| Method | Route                      | Purpose                                        |
-| ------ | -------------------------- | ---------------------------------------------- |
-| GET    | `/api/health`              | status + live MongoDB connection state         |
-| GET    | `/api/posts`               | blog posts (`?category=`, `?q=`, `?limit=`)    |
-| GET    | `/api/posts/:slug`         | single article                                 |
-| GET    | `/api/integrations`        | integration catalogue (`?category=`, `?q=`)    |
-| PATCH  | `/api/integrations/:slug`  | `{ connected: boolean }`                       |
-| GET    | `/api/metrics`             | analytics metrics incl. their 12-week series   |
-| GET    | `/api/testimonials`        | customer quotes                                |
-| POST   | `/api/contact`             | contact form → `ContactMessage`                |
-| POST   | `/api/subscribers`         | newsletter → `Subscriber` (deduplicated)       |
-| POST   | `/api/trials`              | trial modal → `TrialRequest`                   |
-
-Write endpoints are validated server-side and rate limited (10–20 requests/minute per IP).
-Read endpoints return `503 { offline: true }` when MongoDB is not connected.
-
-### Models
-
-`Post`, `Integration`, `Metric`, `Testimonial` (content), `ContactMessage`, `Subscriber`,
-`TrialRequest` (leads). See `server/models/`.
-
----
-
-## Editing the dummy content
-
-Everything — blog posts, integrations, metrics, testimonials, FAQs, contact details, legal
-copy — lives in **`shared/content.js`**, which is loaded by the browser and by
-`server/seed.js`. Change it once, then re-run `npm run seed` so MongoDB matches.
-
-After swapping images in `assets/img/`, update the matching `image.src` values there.
-
-Search the project for `TODO` to find every placeholder:
+All copy, names, numbers and photos are placeholders. Search for `TODO` to find everything
+meant to be replaced:
 
 ```bash
 grep -rn "TODO" --include="*.js" --include="*.html" --include="*.css" .
 ```
 
-> The copy, company names, people, metrics and images are **dummy content**. Replace them
-> before this goes in front of real customers.
-
 ---
 
-## Theme
+## Run it on your own computer
 
-- Tokens live in `:root` and are overridden by `[data-theme="dark"]` in `styles/main.css`.
-- An inline script in `index.html` applies the stored/system theme before first paint (no flash).
-- The header button toggles light/dark, stores the choice, updates `aria-pressed`, the
-  button label and `<meta name="theme-color">`.
-
-## Animations
-
-Elements opt in with `data-anim="up | down | left | right | scale | rotate | fade"`;
-`data-stagger` on a parent cascades its children; `data-counter` animates numbers.
-GSAP ScrollTrigger reveals each element once, from its declared angle, with a long
-`power3.out` ease. Wrap-up details:
-
-- Elements are visible by default; JS only adds the entrance, so a blocked script or a
-  failed GSAP load never leaves a blank page.
-- `prefers-reduced-motion` disables reveals, marquee and parallax.
-- The hero headline uses a masked line reveal; the analytics chart draws its path.
-
----
-
-## Tests
+Requirements: **Node.js 18 or newer**. A database is optional — the site is fully functional
+without one.
 
 ```bash
-npm install              # jsdom + postcss for the front-end suite (once)
-npm test                 # 53 jsdom + structure tests (front end, incl. the 404 page)
-npm run test:api         # 22 Express/API + seed-content + static/404 tests (no MongoDB needed)
+git clone https://github.com/edonis175/Rossell.git rossell
+cd rossell
+npm --prefix server install    # Express and Mongoose (only for the built-in server)
+npm start                      # open http://localhost:4000
 ```
 
-Front-end tests load the real `index.html` and scripts in jsdom and drive the real DOM:
-theme toggle, mobile menu (including Escape), scroll UI, both chart tab groups, CSV export,
-integration search/filter/toggles/persistence/reset, blog filters/load-more/article modal,
-FAQ accordion, trial modal (validation, success, reset, backdrop close), contact form
-(validation, live and offline paths), newsletter, legal modals, toast behaviour, API
-hydration and an "every button" error sweep. Structure tests check unique ids, working
-anchors, labelled controls, existing assets, valid CSS, no emojis and the presence of TODO
-markers.
+`npm start` serves the site from `server/server.js` on one port. No MongoDB running? The API
+answers `503` and every page still renders from `shared/content.js`; form submissions are stored
+in the browser instead.
 
-API tests stub the Mongoose models, so they verify routing, validation, rate limiting,
-serialisation and error handling without a database.
+If you would rather not use Node at all, open `index.html` directly or serve the folder with any
+static server (for example `npx serve .`).
+
+### Optional: the database
+
+```bash
+cp server/.env.example server/.env   # then edit MONGODB_URI (local MongoDB or MongoDB Atlas)
+npm run seed                         # fill the collections with the demo content
+npm run dev                          # restart on changes
+```
+
+Content endpoints return `503 { offline: true }` while the database is unavailable; writes
+(contact, newsletter, trial) are validated and rate limited server-side.
 
 ---
 
-## Deployment
+## Commands
 
-Nothing is deployed yet, by design. The static site is Vercel-ready, but the Express/Mongo
-API needs a hosted MongoDB (Atlas) and either a Node host or Vercel serverless functions.
-That step will be done separately on request.
+| Command             | What it does                                                    |
+| ------------------- | --------------------------------------------------------------- |
+| `npm start`         | serve the site and API from `server/server.js`                  |
+| `npm run dev`       | same, restarting on file changes                                |
+| `npm run seed`      | clear and repopulate MongoDB from `shared/content.js`           |
+| `npm test`          | front-end suite — 53 tests (markup, styles, every interaction)   |
+| `npm run test:api`  | API suite — 22 tests (routes, validation, static + 404 handling) |
+
+The test suites need `npm install` once at the repository root (jsdom and postcss). They do not
+need a database.
+
+---
+
+## Publishing it
+
+The front end is static, so it runs on any host. For Vercel:
+
+1. Sign in at [vercel.com](https://vercel.com) with the GitHub account that owns the repository.
+2. **Add New → Project**, import the repository and keep the framework preset **Other**
+   (no build command, no output directory). `vercel.json` already sets headers and caching.
+3. Deploy, then send future changes with `git push` — Vercel redeploys `main` automatically.
+
+`404.html` is picked up automatically for unknown URLs. The API is not required for the site
+to work; if you publish it too, set `MONGODB_URI` in the host's environment variables and never
+commit the file containing it.
