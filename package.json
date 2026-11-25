@@ -1,0 +1,17 @@
+{
+  "name": "rossell-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rossell marketing site (static front end) with an Express + MongoDB API in /server",
+  "scripts": {
+    "dev": "node server/server.js",
+    "start": "node server/server.js",
+    "seed": "npm --prefix server run seed",
+    "test": "node --test tests/*.test.mjs",
+    "test:api": "npm --prefix server test"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1",
+    "postcss": "^8.4.49"
+  }
+}
