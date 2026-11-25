@@ -562,23 +562,37 @@ body.dark-mode .ambient2 {
     gap: 24px;
     padding: 22px var(--gutter);
     z-index: 250;
-    border-bottom: 1px solid transparent;
+    border: 1px solid transparent;
+    border-radius: 0;
+    background: transparent;
     transition:
+        top 0.4s var(--ease),
+        left 0.4s var(--ease),
+        right 0.4s var(--ease),
+        border-radius 0.4s var(--ease),
+        padding 0.4s var(--ease),
         background 0.35s ease,
         border-color 0.35s ease,
-        padding 0.35s ease,
-        box-shadow 0.35s ease,
+        box-shadow 0.4s var(--ease),
         backdrop-filter 0.35s ease;
 }
 
+/* Floating rounded bar while the page is scrolled; it eases back to the
+   full-width, square header as soon as the page returns to the top.
+   The inset + inline padding adds up to the normal gutter, so the logo and
+   links barely move — only the bar's edges and corners animate. */
 .site-header.is-scrolled {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    top: 12px;
+    left: clamp(10px, 2vw, 28px);
+    right: clamp(10px, 2vw, 28px);
+    /* inset + inline padding always add up to the normal gutter */
+    padding: 10px max(16px, calc(var(--gutter) - clamp(10px, 2vw, 28px)));
+    border-radius: 18px;
+    border-color: var(--line);
     background: var(--header-bg);
     -webkit-backdrop-filter: blur(16px) saturate(1.2);
     backdrop-filter: blur(16px) saturate(1.2);
-    border-bottom-color: var(--line);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
 }
 
 .logo {
@@ -3188,8 +3202,11 @@ body.dark-mode .panel:hover {
     }
 
     .site-header.is-scrolled {
-        padding-top: 10px;
-        padding-bottom: 10px;
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        padding-inline: max(14px, calc(var(--gutter) - 8px));
+        border-radius: 14px;
     }
 
     .logo-text {
