@@ -1,0 +1,7 @@
+# Only the static front end is deployed. The Express app, the test suites and
+# the local download archive stay out of the upload.
+server/
+tests/
+*.zip
+*.log
+.arena/
