@@ -45,9 +45,24 @@ export function createApp({ staticDir } = {}) {
       maxAge: process.env.NODE_ENV === "production" ? "1h" : 0,
     }));
 
-    app.get("*", (req, res, next) => {
-      if (path.extname(req.path)) return next();
-      return res.sendFile(path.join(staticDir, "index.html"));
+    // Unknown page routes answer with the real 404 page and a real 404
+    // status, so the Express server behaves like a static host would.
+    app.use((req, res) => {
+      if (path.extname(req.path)) {
+        return res.status(404).json({ message: "Not found." });
+      }
+
+      return res.status(404).sendFile(path.join(staticDir, "404.html"), (error) => {
+        if (!error) {
+          return;
+        }
+
+        if (res.headersSent) {
+          return res.end();
+        }
+
+        return res.status(404).type("text/plain").send("Not found.");
+      });
     });
   }
 

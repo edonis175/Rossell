@@ -13,11 +13,14 @@ vendored locally, so the site renders and animates even without internet access.
 ```
 .
 ├── index.html                 # the whole site (hero, features, analytics, integrations, blog, contact)
+├── 404.html                   # playful not-found page (magnetic 404, same header + theme)
 ├── styles/
 │   ├── main.css               # design tokens, components, sections, responsive rules, dark theme
+│   ├── 404.css                # 404 page only: artwork, entrance, responsive rules
 │   └── fonts/                 # Manrope + Plus Jakarta Sans (variable, self-hosted)
 ├── scripts/
 │   ├── main.js                # theme, nav, modals, scroll reveals, charts, forms, filters
+│   ├── 404.js                 # 404 page only: theme toggle, magnet, requested path
 │   ├── api.js                 # fetch wrapper for /api with offline fallback
 │   └── vendor/                # gsap.min.js + ScrollTrigger.min.js (no CDN dependency)
 ├── shared/
@@ -41,6 +44,20 @@ vendored locally, so the site renders and animates even without internet access.
 Also included: dark/light theme (persisted, follows the OS until the visitor chooses),
 mobile navigation, scroll progress bar, back-to-top, toast feedback, trial sign-up modal,
 newsletter form and keyboard/focus handling for every dialog.
+
+### 404 page
+
+`404.html` is a standalone page built from the same tokens, header pill and theme toggle:
+
+- the three outlined digits lean toward the cursor (the bigger the pull, the closer it is)
+  and ease back to rest; `prefers-reduced-motion` and touch screens get the still version
+- the zero is a real `<button>`: it spins and answers with a new line each press
+- the requested path is printed from `location` as text (never as markup)
+- header, primary button and quiet links all lead back into the site
+
+Any host serves it automatically: `express.static` lets a request fall through to a
+catch-all that answers `404` with `404.html`, and missing assets/API routes keep their
+JSON 404. Static hosts (Netlify, Vercel, GitHub Pages) pick up the file by convention.
 
 ---
 
@@ -141,8 +158,8 @@ GSAP ScrollTrigger reveals each element once, from its declared angle, with a lo
 
 ```bash
 npm install              # jsdom + postcss for the front-end suite (once)
-npm test                 # 43 jsdom + structure tests (front end)
-npm run test:api         # 18 Express/API + seed-content tests (no MongoDB needed)
+npm test                 # 53 jsdom + structure tests (front end, incl. the 404 page)
+npm run test:api         # 22 Express/API + seed-content + static/404 tests (no MongoDB needed)
 ```
 
 Front-end tests load the real `index.html` and scripts in jsdom and drive the real DOM:
