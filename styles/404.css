@@ -1,0 +1,472 @@
+/* =====================================================================
+   Rossell — 404 page
+   Loaded after styles/main.css, so every colour, font and radius here
+   comes from the existing tokens. Nothing new is introduced except the
+   magnetic number, which eases toward the cursor and snaps back.
+   ===================================================================== */
+
+.page-404 {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* ------------------------------- layout ------------------------------ */
+
+.lost {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: grid;
+  place-items: center;
+  /* clears the floating header pill and leaves room for the footer line */
+  padding: clamp(116px, 15vh, 168px) var(--gutter) clamp(28px, 5vh, 56px);
+  text-align: center;
+}
+
+.lost-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 1.8vw, 20px);
+  width: 100%;
+  max-width: 940px;
+}
+
+.lost-eyebrow {
+  margin: 0;
+  opacity: 0;
+  animation: lost-rise 0.7s var(--ease) 0.05s forwards;
+}
+
+/* --------------------------- the 404 artwork ------------------------- */
+
+.lost-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: clamp(6px, 1.6vw, 16px) 0 clamp(2px, 1vw, 10px);
+}
+
+/* Slowly rotating dashed ring with a single dot travelling around it.
+   It sits behind the number and never swallows pointer events. */
+.lost-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(238px, 36vw, 520px);
+  aspect-ratio: 1;
+  margin: 0;
+  border: 1px dashed var(--line-strong);
+  border-radius: 50%;
+  opacity: 0.55;
+  transform: translate(-50%, -50%);
+  animation: lost-orbit 46s linear infinite;
+  pointer-events: none;
+}
+
+.lost-orbit-dot {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+  transform: translateX(-50%);
+}
+
+.lost-mark {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0px, 0.8vw, 10px);
+  font-family: "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-weight: 800;
+  font-size: clamp(104px, 20vw, 286px);
+  line-height: 0.78;
+  letter-spacing: -0.07em;
+  user-select: none;
+}
+
+/* Outlined digits: transparent fill with an ink stroke. Browsers without
+   text-stroke fall back to a solid fill (see @supports below). */
+.lost-digit {
+  display: inline-block;
+  color: transparent;
+  -webkit-text-stroke: clamp(1.5px, 0.22vw, 2.5px) var(--ink);
+  text-stroke: clamp(1.5px, 0.22vw, 2.5px) var(--ink);
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  /* Base state is visible; `backwards` only hides the digit during its
+     delay, so replacing this animation (the zero's spin) cannot blank it. */
+  opacity: 1;
+  animation: lost-digit-in 0.9s var(--ease) backwards;
+}
+
+.lost-mark > .lost-digit:nth-child(1) {
+  animation-delay: 0.12s;
+}
+
+.lost-mark > .lost-digit:nth-child(2) {
+  animation-delay: 0.22s;
+}
+
+.lost-mark > .lost-digit:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+/* The zero is a button: same outline, no chrome, dashed ring on hover. */
+.lost-digit--zero {
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: transparent;
+  cursor: pointer;
+  transition: -webkit-text-stroke-color 0.3s ease;
+}
+
+.lost-digit--zero::before {
+  content: "";
+  position: absolute;
+  inset: 2% -16%;
+  border: 1px dashed var(--line-strong);
+  border-radius: 999px;
+  opacity: 0;
+  transform: scale(0.92);
+  transition:
+    opacity 0.35s ease,
+    transform 0.45s var(--ease);
+  pointer-events: none;
+}
+
+.lost-digit--zero:hover::before,
+.lost-digit--zero:focus-visible::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.lost-digit--zero:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: clamp(6px, 1vw, 12px);
+  border-radius: 40px;
+}
+
+.lost-digit--zero.is-spinning {
+  animation: lost-spin 0.85s var(--ease);
+}
+
+@supports not (-webkit-text-stroke: 1px #000) {
+  .lost-digit {
+    color: var(--ink);
+  }
+}
+
+/* --------------------------- copy & actions -------------------------- */
+
+.lost-title {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", "Manrope", sans-serif;
+  font-size: clamp(23px, 3.2vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  opacity: 0;
+  animation: lost-rise 0.8s var(--ease) 0.4s forwards;
+}
+
+.lost-copy {
+  max-width: 46ch;
+  margin: 0;
+  font-size: clamp(14.5px, 1.05vw, 16px);
+  color: var(--ink-soft);
+  line-height: 1.6;
+  opacity: 0;
+  animation: lost-rise 0.8s var(--ease) 0.48s forwards;
+}
+
+.lost-path {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  margin: 0;
+  padding: 7px 15px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  opacity: 0;
+  animation: lost-rise 0.8s var(--ease) 0.56s forwards;
+}
+
+.lost-path-label {
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+  color: var(--ink-mute);
+}
+
+.lost-path code {
+  display: inline-block;
+  vertical-align: bottom;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 12.5px;
+  color: var(--ink);
+  max-width: min(58vw, 420px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Reserved line so the joke never pushes the buttons around. */
+.lost-reaction {
+  min-height: 1.2em;
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--ink-mute);
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.5s var(--ease);
+}
+
+.lost-reaction.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.lost-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: clamp(2px, 1vw, 8px);
+  opacity: 0;
+  animation: lost-rise 0.8s var(--ease) 0.64s forwards;
+}
+
+.lost-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  opacity: 0;
+  animation: lost-rise 0.8s var(--ease) 0.72s forwards;
+}
+
+.lost-links a {
+  position: relative;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.lost-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease);
+}
+
+.lost-links a:hover {
+  color: var(--ink);
+}
+
+.lost-links a:hover::after,
+.lost-links a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.lost-links span {
+  color: var(--line-strong);
+}
+
+/* The toggle does a small half-turn here; the main site animates it with GSAP. */
+.theme-toggle-btn.is-flipping {
+  animation: lost-flip 0.55s var(--ease);
+}
+
+/* ------------------------------- footer ------------------------------ */
+
+.lost-foot {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 0 var(--gutter) clamp(20px, 3vh, 32px);
+  font-size: 12px;
+  color: var(--ink-mute);
+  letter-spacing: 0.01em;
+}
+
+/* ------------------------------ keyframes ---------------------------- */
+
+@keyframes lost-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lost-digit-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.14em, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes lost-orbit {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  12% {
+    opacity: 0.55;
+  }
+
+  100% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes lost-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes lost-flip {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* ------------------------------ responsive --------------------------- */
+
+@media (max-width: 720px) {
+  .lost {
+    padding-top: clamp(108px, 14vh, 132px);
+    gap: 0;
+  }
+
+  .lost-mark {
+    font-size: clamp(96px, 30vw, 190px);
+  }
+
+  .lost-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: min(100%, 320px);
+  }
+
+  .lost-actions .btn {
+    width: 100%;
+  }
+
+  .lost-foot {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (max-height: 760px) and (min-width: 721px) {
+  .lost {
+    padding-top: clamp(96px, 12vh, 132px);
+  }
+
+  .lost-mark {
+    font-size: clamp(92px, 15vw, 178px);
+  }
+
+  .lost-inner {
+    gap: 12px;
+  }
+
+  .lost-orbit {
+    width: clamp(200px, 27vw, 340px);
+  }
+}
+
+@media (max-width: 560px) {
+  .lost-header-label {
+    display: none;
+  }
+
+  .lost-header-btn {
+    padding: 9px 11px;
+  }
+}
+
+@media (max-width: 420px) {
+  .lost-header-btn {
+    padding-inline: 12px;
+  }
+
+  .lost-path code {
+    max-width: 52vw;
+  }
+}
+
+/* Motion-sensitive visitors get the finished state, no drifting or spinning. */
+@media (prefers-reduced-motion: reduce) {
+  .lost-eyebrow,
+  .lost-digit,
+  .lost-title,
+  .lost-copy,
+  .lost-path,
+  .lost-actions,
+  .lost-links {
+    animation: none;
+    opacity: 1;
+  }
+
+  .lost-orbit {
+    animation: none;
+    opacity: 0.55;
+    transform: translate(-50%, -50%);
+  }
+
+  .lost-digit--zero.is-spinning {
+    animation: none;
+  }
+
+  .lost-reaction {
+    transition: none;
+  }
+}

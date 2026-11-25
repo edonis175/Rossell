@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page not found — Rossell</title>
+    <meta name="description" content="That page is not here. Head back to Rossell and pick up where you left off.">
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#f6f3eb">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+
+    <!-- Theme is applied before first paint so there is no flash of the wrong theme.
+         TODO: keep these colour values in sync with styles/main.css -->
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem("theme");
+                var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                var theme = stored === "dark" || stored === "light" ? stored : (prefersDark ? "dark" : "light");
+                document.documentElement.setAttribute("data-theme", theme);
+                if (theme === "dark") { document.documentElement.classList.add("dark-mode"); }
+                document.querySelector('meta[name="theme-color"]').setAttribute("content", theme === "dark" ? "#121210" : "#f6f3eb");
+            } catch (e) { /* localStorage can be blocked — light theme is the safe default */ }
+        })();
+    </script>
+
+    <link rel="preload" href="/styles/fonts/manrope-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/styles/fonts/jakarta-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/404.css">
+    <!-- TODO: all links/assets here are root-absolute (they work at any depth).
+         If this site is ever deployed under a sub-path, prefix them with that base. -->
+</head>
+
+<body class="page-404">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="ambient1" aria-hidden="true"></div>
+    <div class="ambient2" aria-hidden="true"></div>
+
+    <!-- The header starts as the floating pill, since there is nothing to scroll. -->
+    <header class="site-header is-scrolled">
+        <a class="logo" href="/" aria-label="Rossell home">
+            <span class="logo-cube" aria-hidden="true">
+                <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+                    <defs>
+                        <linearGradient id="cubeGrad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#3a3a3a" />
+                            <stop offset="100%" stop-color="#0a0a0a" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M17 3 L29 9 L29 21 L17 27 L17 15 L5 9 Z" fill="url(#cubeGrad)" stroke="currentColor"
+                        stroke-width="0.5" />
+                    <path d="M5 9 L17 15 L17 27 L5 21 Z" fill="#2a2a2a" stroke="currentColor" stroke-width="0.5" />
+                    <path d="M17 3 L29 9 L17 15 L5 9 Z" fill="#444" stroke="currentColor" stroke-width="0.5" />
+                </svg>
+            </span>
+            <span class="logo-text">ROSSELL</span>
+        </a>
+
+        <div class="header-actions">
+            <button id="themeToggle" class="theme-toggle-btn" type="button" aria-label="Switch to dark theme"
+                aria-pressed="false">
+                <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="23" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="1" y1="12" x2="3" y2="12" />
+                    <line x1="21" y1="12" x2="23" y2="12" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </svg>
+                <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+            </button>
+
+            <a class="btn btn--small btn--primary lost-header-btn" href="/" aria-label="Back to home">
+                <span class="lost-header-label">Back to home</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- ============================= 404 ============================= -->
+    <main class="lost" id="main">
+        <div class="lost-inner">
+            <p class="eyebrow lost-eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Error 404</p>
+
+            <div class="lost-stage">
+                <div class="lost-orbit" aria-hidden="true">
+                    <span class="lost-orbit-dot"></span>
+                </div>
+
+                <!-- The number is decorative; the zero is a real button so the joke
+                     is reachable with a keyboard and a screen reader. -->
+                <div class="lost-mark">
+                    <span class="lost-digit" data-magnet="0.45" aria-hidden="true">4</span>
+                    <button class="lost-digit lost-digit--zero" id="lostZero" type="button" data-magnet="1.15"
+                        aria-label="Missing page. Press for a reaction.">
+                        <span aria-hidden="true">0</span>
+                    </button>
+                    <span class="lost-digit" data-magnet="0.45" aria-hidden="true">4</span>
+                </div>
+            </div>
+
+            <h1 class="lost-title">This page took a wrong turn.</h1>
+            <p class="lost-copy">
+                The link may be broken, or the page moved somewhere quieter. Everything else on the site is
+                exactly where you left it.
+            </p>
+
+            <p class="lost-path">
+                <span class="lost-path-label">Requested</span>
+                <code id="lostPath">/this-page</code>
+            </p>
+
+            <p class="lost-reaction" id="lostReaction" role="status" aria-live="polite"></p>
+
+            <div class="lost-actions">
+                <a class="btn btn--primary" href="/">
+                    Back to the homepage
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                </a>
+                <a class="btn btn--ghost" href="/#contact">Tell us what broke</a>
+            </div>
+
+            <nav class="lost-links" aria-label="Popular sections">
+                <a href="/#features">Features</a>
+                <span aria-hidden="true">/</span>
+                <a href="/#analytics">Analytics</a>
+                <span aria-hidden="true">/</span>
+                <a href="/#blog">Blog</a>
+                <span aria-hidden="true">/</span>
+                <a href="/#contact">Contact</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="lost-foot">
+        <span>Rossell — workspace intelligence</span>
+        <span>Nothing was lost. Except this page.</span>
+    </footer>
+
+    <script src="/scripts/404.js" defer></script>
+</body>
+
+</html>
