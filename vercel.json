@@ -1,6 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "npm install --omit=dev --no-audit --no-fund",
+  "buildCommand": "mkdir -p dist && cp -r index.html 404.html styles scripts shared assets dist",
+  "outputDirectory": "dist",
   "trailingSlash": false,
   "headers": [
     {
