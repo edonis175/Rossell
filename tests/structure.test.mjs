@@ -146,6 +146,24 @@ test("scroll reveals are declared from several directions", () => {
   assert.ok(document.querySelectorAll("[data-counter]").length >= 3);
 });
 
+test("the scrolled header becomes a rounded floating bar and resets at the top", () => {
+  const css = fs.readFileSync(path.join(root, "styles/main.css"), "utf8");
+
+  const base = css.match(/\.site-header \{([^}]*)\}/);
+  assert.ok(base, ".site-header base rule exists");
+  assert.match(base[1], /border-radius:\s*0/, "the header starts square");
+  assert.match(base[1], /transition:[^;]*border-radius/s, "the radius is animated");
+  assert.match(base[1], /transition:[^;]*left/s);
+
+  const scrolled = css.match(/\.site-header\.is-scrolled \{([^}]*)\}/);
+  assert.ok(scrolled, ".site-header.is-scrolled rule exists");
+  assert.match(scrolled[1], /border-radius:\s*1[468]px/, "rounded while scrolled");
+  assert.match(scrolled[1], /top:\s*12px/);
+  assert.match(scrolled[1], /left:\s*clamp\(/);
+  assert.match(scrolled[1], /right:\s*clamp\(/);
+  assert.match(scrolled[1], /backdrop-filter/);
+});
+
 test("theme toggle ships both icons and the stylesheet swaps them", () => {
   const toggle = document.querySelector("#themeToggle");
   assert.ok(toggle.querySelector(".sun-icon"));

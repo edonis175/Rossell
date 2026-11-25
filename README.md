@@ -141,7 +141,7 @@ GSAP ScrollTrigger reveals each element once, from its declared angle, with a lo
 
 ```bash
 npm install              # jsdom + postcss for the front-end suite (once)
-npm test                 # 42 jsdom + structure tests (front end)
+npm test                 # 43 jsdom + structure tests (front end)
 npm run test:api         # 18 Express/API + seed-content tests (no MongoDB needed)
 ```
 

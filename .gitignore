@@ -8,3 +8,6 @@ npm-debug.log*
 coverage/
 .vercel
 .tmp/
+
+# Local download artefacts
+*.zip
